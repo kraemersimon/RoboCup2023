@@ -28,18 +28,24 @@ void setup() {
 void loop() {
   int farbeR = colorR.getVal();
   int farbeL = colorL.getVal();
-  
-  int delta = farbeR - farbeL;
+
+  int delta = farbeL - farbeR;
   int s = delta * MULTIPLIKATOR;
-  fahreOhneBremse(s+SPEED, -s+SPEED, 1);
-  /*
+  fahreOhneBremse(s + SPEED, -s + SPEED, 1);
+
   if (farbeR == 3) {
-    fahre(100, 100, 100);
-    delay(500);
-    fahre(100, -100, 300);
-    delay(500);
-    while (colorR.getVal() != 3) fahreOhneBremse(100, -100, 1);
-  }*/
+    fahre(100, 100, 300);
+    fahre(100, -100, 150);
+    while (colorR.getVal() == 6) fahreOhneBremse(50, 0, 1);
+    fahre(100, -100, 50);
+  }
+
+  if (farbeL == 3) {
+    fahre(-100, -100, 300);
+    fahre(-100, 100, 150);
+    while (colorL.getVal() == 6) fahreOhneBremse(-50, 0, 1);
+    fahre(-100, 100, 50);
+  }
 }
 
 /********************************************
@@ -60,5 +66,3 @@ void fahreOhneBremse(int links, int rechts, int zeit) {
   evshield.bank_b.motorRunUnlimited(SH_Motor_2, SH_Direction_Forward, -rechts);
   delay(zeit);
 }
-
-
