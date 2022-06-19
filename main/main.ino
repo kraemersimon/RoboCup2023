@@ -8,8 +8,8 @@ EVShield evshield(0x34, 0x36);
 EVs_EV3Color colorR;  //erster  Farbsensor heisst colorR
 EVs_EV3Color colorL;  //zweiter Farbsensor heisst colorL
 
-int s = 30;  //s steht fuer Geschwindigkeit(speed)
-
+int SPEED = 15;
+int MULTIPLIKATOR = 8;
 void setup() {
   evshield.init(SH_HardwareI2C);
 
@@ -26,21 +26,20 @@ void setup() {
 }
 
 void loop() {
-  if (colorR.getVal() == 6) {
-    Serial.println("rechts weiss");
-  }
-
-  if (colorR.getVal() == 1) {
-    Serial.println("rechts schwarz");
-  }
-
-  if (colorL.getVal() == 6) {
-    Serial.println("links weiss");
-  }
-
-  if (colorL.getVal() == 1) {
-    Serial.println("links schwarz");
-  }
+  int farbeR = colorR.getVal();
+  int farbeL = colorL.getVal();
+  
+  int delta = farbeR - farbeL;
+  int s = delta * MULTIPLIKATOR;
+  fahreOhneBremse(s+SPEED, -s+SPEED, 1);
+  /*
+  if (farbeR == 3) {
+    fahre(100, 100, 100);
+    delay(500);
+    fahre(100, -100, 300);
+    delay(500);
+    while (colorR.getVal() != 3) fahreOhneBremse(100, -100, 1);
+  }*/
 }
 
 /********************************************
@@ -49,18 +48,6 @@ void loop() {
 
 
 void fahre(int links, int rechts, int zeit) {
-  if (links > 100) {
-    links = 100;
-  }
-  if (rechts > 100) {
-    rechts = 100;
-  }
-  if (links < -100) {
-    links = -100;
-  }
-  if (rechts < -100) {
-    rechts = -100;
-  }
   evshield.bank_b.motorRunUnlimited(SH_Motor_1, SH_Direction_Forward, -links);
   evshield.bank_b.motorRunUnlimited(SH_Motor_2, SH_Direction_Forward, -rechts);
   delay(zeit);
@@ -69,16 +56,9 @@ void fahre(int links, int rechts, int zeit) {
 }
 
 void fahreOhneBremse(int links, int rechts, int zeit) {
-  if (links > 100) {
-    links = 100;
-  }
-  if (rechts > 100) {
-    rechts = 100;
-  }
-  if (links < -100) {
-    links = -100;
-  }
-  if (rechts < -100) {
-    rechts = -100;
-  }
-}    
+  evshield.bank_b.motorRunUnlimited(SH_Motor_1, SH_Direction_Forward, -links);
+  evshield.bank_b.motorRunUnlimited(SH_Motor_2, SH_Direction_Forward, -rechts);
+  delay(zeit);
+}
+
+
