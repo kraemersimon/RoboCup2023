@@ -1,6 +1,10 @@
+int a = 1;
 void setup() {
-	Serial.begin(9600);
+  Serial.begin(9600);
 }
 void loop() {
-  Serial.println("Test");
+  if (a < 100) {
+    a++;
+    Serial.println(a);
+  }
 }
