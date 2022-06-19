@@ -4,7 +4,7 @@ void setup() {
 }
 void loop() {
   if (a < 100) {
-    a++;
+    a = a + 1;
     Serial.println(a);
   }
 }
