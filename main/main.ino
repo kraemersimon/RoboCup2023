@@ -23,6 +23,8 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Start");
   while (!evshield.getButtonState(BTN_GO)) {}
+  evshield.bank_a.ledSetRGB(0, 0, 0);
+  evshield.bank_b.ledSetRGB(0, 0, 0);
 }
 
 void loop() {
@@ -33,19 +35,34 @@ void loop() {
   int s = delta * MULTIPLIKATOR;
   fahreOhneBremse(s + SPEED, -s + SPEED, 1);
 
+  
+
   if (farbeR == 3) {
-    fahre(100, 100, 300);
-    fahre(100, -100, 150);
-    while (colorR.getVal() == 6) fahreOhneBremse(50, 0, 1);
-    fahre(100, -100, 50);
+    fahre(0, 0, 1);
+    delay(2000);
+    fahre(40, 40, 70);
+    delay(2000);
+    if (farbeL == 3) {                       // Deadend
+      evshield.bank_a.ledSetRGB(0, 100, 0);
+      evshield.bank_b.ledSetRGB(0, 100, 0);
+      fahre(100, -100, 9000);
+    } else {                                // normales Grün
+      evshield.bank_a.ledSetRGB(0, 100, 0);
+      fahre(100, 100, 300);
+      fahre(100, -100, 150);
+      while (colorR.getVal() == 6) fahreOhneBremse(50, 0, 1);
+      fahre(100, -100, 50);
+    }
   }
 
   if (farbeL == 3) {
-    fahre(-100, -100, 300);
+    fahre(100, 100, 300);
     fahre(-100, 100, 150);
+    evshield.bank_a.ledSetRGB(0, 0, 100);
     while (colorL.getVal() == 6) fahreOhneBremse(-50, 0, 1);
     fahre(-100, 100, 50);
   }
+  
 }
 
 /********************************************
