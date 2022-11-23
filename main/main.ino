@@ -7,30 +7,30 @@
 
 EVShield evshield(0x34, 0x36);
 
-EVs_EV3Color colorR;  //erster  Farbsensor heisst colorR
-EVs_EV3Color colorL;  //zweiter Farbsensor heisst colorL
+EVs_EV3Color colorR;  //first color sensors name is colorR
+EVs_EV3Color colorL;  //second color sensors name is colorL
 
 int SPEED = 255;
 void setup() {
-  pinMode(2, OUTPUT);  //Pinout linker Motor
+  pinMode(2, OUTPUT);  //Pinout left motor
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
 
-  pinMode(5, OUTPUT);  //Pinout rechter Motor
+  pinMode(5, OUTPUT);  //Pinout right motor 
   pinMode(6, OUTPUT);
   pinMode(7, OUTPUT);
 
   evshield.init(SH_HardwareI2C);
 
-  colorR.init(&evshield, SH_BBS2);          //rechter Farbsensor ist an Port BBS2
-  colorR.setMode(MODE_Color_MeasureColor);  //rechter Farbsensor sucht nach Farbe
+  colorR.init(&evshield, SH_BBS2);          //right color sensor on port BBS2
+  colorR.setMode(MODE_Color_MeasureColor);  //right color sensor searches for colors
 
-  colorL.init(&evshield, SH_BBS1);          //linker Farbsensor ist an Port BBS1
-  colorL.setMode(MODE_Color_MeasureColor);  //linker Farbsensor sucht nach Farbe
+  colorL.init(&evshield, SH_BBS1);          //left color sensor on port BBS1
+  colorL.setMode(MODE_Color_MeasureColor);  //left color sensor searches for colors
 
-  // Warten auf GO-Knopf
+  // Waiting for go button 
   Serial.begin(9600);
-  //Serial.println("Start");
+  //Serial.println("Go");
   while (!evshield.getButtonState(BTN_GO)) {
     evshield.bank_a.ledSetRGB(0, 255, 0);
     evshield.bank_b.ledSetRGB(0, 255, 0);
@@ -45,7 +45,7 @@ void loop() {
   int r = colorR.getVal();
   int l = colorL.getVal();
 
-  if ((l == 6 && r == 6) || (l == 1 && r == 1)) m(SPEED, SPEED, 0);
+  if ((l == 6 && r == 6) || (l == 1 && r == 1)) m(SPEED, SPEED, 0); 
   else if (l == 1) m(-SPEED, SPEED, 0);
   else if (r == 1) m(SPEED, -SPEED, 0);
 
@@ -78,11 +78,13 @@ void loop() {
 
     if (green_left && green_right) m(-255, 255, MS_PER_DEG * 180);
     else if (green_left) {
-      m(255, 255, 200);
+      m(255, 255, 300);
       m(-255, 255, MS_PER_DEG * 90);
+      m(255, 255, 100);
     } else if (green_right) {
-      m(255, 255, 200);
+      m(255, 255, 300);
       m(255, -255, MS_PER_DEG * 90);
+      m(255, 255, 100);
     }
   }
 }
