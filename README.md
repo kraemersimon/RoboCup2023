@@ -1,2 +1,4 @@
-# RoboCup2023
-RoboCup programs for the year 2023
+RoboCup programs from team Krypton for the year 2023.
+
+[Youtube Channel](https://www.youtube.com/@evbrobocup).
+
